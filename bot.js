@@ -651,6 +651,8 @@ socket.on("prices", async (p) => {
 					if(error){
 						console.log("Tx error, not triggering. You probably need to refill your address with LINK or MATIC tokens.");
 					}else{
+						if(alreadyTriggered(t, orderType) || nftsBeingUsed.includes(nft.id)) return;
+
 						nftsBeingUsed.push(nft.id);
 						ordersTriggered.push({trade: t, orderType: orderType});
 
