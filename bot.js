@@ -282,7 +282,7 @@ async function fetchTradingVariables(){
 setInterval(() => {
 	fetchTradingVariables();
 	fetchOpenTrades();
-}, 60*10*1000);
+}, 60*5*1000);
 
 // -----------------------------------------
 // 6. SELECT NFT TO EXECUTE ORDERS
@@ -650,6 +650,14 @@ socket.on("prices", async (p) => {
 				console.log("Try to trigger (order type: " + orderInfo.name + ", nft id: "+orderInfo.nftId+")");
 
 				//nonce = await web3[selectedProvider].eth.getTransactionCount(process.env.PUBLIC_KEY);
+
+				tradingContract.methods.executeNftOrder(orderType, t.trader, t.pairIndex, t.index, nft.id, nft.type)
+				.estimateGas((error, result) => {
+					if(error){
+						console.log("Tx error, not triggering. You probably need to refill your address with LINK or MATIC tokens.");
+						return;
+					}
+				});
 
 				const tx = {
 					from: process.env.PUBLIC_KEY,
