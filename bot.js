@@ -648,6 +648,7 @@ socket.on("prices", async (p) => {
 
 				tradingContract.methods.executeNftOrder(orderType, t.trader, t.pairIndex, t.index, nft.id, nft.type)
 				.estimateGas((error, result) => {
+					console.log(error, result);
 					if(error){
 						console.log("Tx error, not triggering. You probably need to refill your address with LINK or MATIC tokens.");
 					}else{
