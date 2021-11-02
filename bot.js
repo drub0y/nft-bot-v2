@@ -647,7 +647,7 @@ socket.on("prices", async (p) => {
 				//nonce = await web3[selectedProvider].eth.getTransactionCount(process.env.PUBLIC_KEY);
 
 				tradingContract.methods.executeNftOrder(orderType, t.trader, t.pairIndex, t.index, nft.id, nft.type)
-				.estimateGas((error, result) => {
+				.estimateGas({from: process.env.PUBLIC_KEY}, (error, result) => {
 					console.log(error, result);
 					if(error){
 						console.log("Tx error, not triggering. You probably need to refill your address with LINK or MATIC tokens.");
