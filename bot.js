@@ -634,15 +634,10 @@ socket.on("prices", async (p) => {
 			}
 
 			if(orderType > -1 && !alreadyTriggered(t, orderType)){
-				ordersTriggered.push({trade: t, orderType: orderType});
-
 				const nft = await selectNft();
 				if(nft === null){ 
-					ordersTriggered.pop();
 					return; 
 				}
-
-				nftsBeingUsed.push(nft.id);
 
 				const orderInfo = {nftId: nft.id, trade: t, type: orderType,
 					name: orderType === 0 ? "TP" : orderType === 1 ? "SL" : orderType === 2 ? "LIQ" : "OPEN LIMIT"};
@@ -656,6 +651,9 @@ socket.on("prices", async (p) => {
 					if(error){
 						console.log("Tx error, not triggering. You probably need to refill your address with LINK or MATIC tokens.");
 					}else{
+						nftsBeingUsed.push(nft.id);
+						ordersTriggered.push({trade: t, orderType: orderType});
+
 						const tx = {
 							from: process.env.PUBLIC_KEY,
 						    to : tradingAddress,
