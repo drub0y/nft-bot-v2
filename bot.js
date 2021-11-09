@@ -597,7 +597,6 @@ function wss(){
 	socket.onmessage = async (msg) => {
 		const p = JSON.parse(msg.data);
 		if(p.closes === undefined) return;
-		console.log(p.closes);
 		
 		if(pairs.length > 0 && allowedLink){
 			for (let i = openTrades.length - 1; i > 0; i--) {
