@@ -265,16 +265,27 @@ setInterval(() => {
 
 async function fetchTradingVariables(){
 	web3[selectedProvider].eth.net.isListening().then(async () => {
-		const maxPerPair = await storageContract.methods.maxTradesPerPair().call();
-		const nftSuccessTimelock = await storageContract.methods.nftSuccessTimelock().call();
-		const pairsCount = await aggregatorContract.methods.pairsCount().call();
-		nfts = [];
+		const [
+			maxPerPair,
+			nftSuccessTimelock,
+			pairsCount,
+			nftsCount1,
+			nftsCount2,
+			nftsCount3,
+			nftsCount4,
+			nftsCount5,
+		 ] = await Promise.all([
+			 storageContract.methods.maxTradesPerPair().call(),
+			 storageContract.methods.nftSuccessTimelock().call(),
+			 aggregatorContract.methods.pairsCount().call(),
+			 nftContract1.methods.balanceOf(process.env.PUBLIC_KEY).call(),
+			 nftContract2.methods.balanceOf(process.env.PUBLIC_KEY).call(),
+			 nftContract3.methods.balanceOf(process.env.PUBLIC_KEY).call(),
+			 nftContract4.methods.balanceOf(process.env.PUBLIC_KEY).call(),
+			 nftContract5.methods.balanceOf(process.env.PUBLIC_KEY).call()
+		 ]);
 
-		const nftsCount1 = await nftContract1.methods.balanceOf(process.env.PUBLIC_KEY).call();
-		const nftsCount2 = await nftContract2.methods.balanceOf(process.env.PUBLIC_KEY).call();
-		const nftsCount3 = await nftContract3.methods.balanceOf(process.env.PUBLIC_KEY).call();
-		const nftsCount4 = await nftContract4.methods.balanceOf(process.env.PUBLIC_KEY).call();
-		const nftsCount5 = await nftContract5.methods.balanceOf(process.env.PUBLIC_KEY).call();
+		nfts = [];
 
 		for(var i = 0; i < nftsCount1; i++){
 			const id = await nftContract1.methods.tokenOfOwnerByIndex(process.env.PUBLIC_KEY, i).call();
