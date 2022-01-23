@@ -103,16 +103,33 @@ async function selectProvider(n){
 	selectedProvider = n;
 	storageContract = new web3[n].eth.Contract(STORAGE_ABI, process.env.STORAGE_ADDRESS);
 
-	const callbacksAddress = await storageContract.methods.callbacks().call();
-	tradingAddress = await storageContract.methods.trading().call();
-	const aggregatorAddress = await storageContract.methods.priceAggregator().call();
-	const vaultAddress = await storageContract.methods.vault().call();
-	const nftAddress1 = await storageContract.methods.nfts(0).call();
-	const nftAddress2 = await storageContract.methods.nfts(1).call();
-	const nftAddress3 = await storageContract.methods.nfts(2).call();
-	const nftAddress4 = await storageContract.methods.nfts(3).call();
-	const nftAddress5 = await storageContract.methods.nfts(4).call();
-	const linkAddress = await storageContract.methods.linkErc677().call();
+	const storageContractMethods = storageContract.methods;
+
+	const [
+		callbacksAddress, 
+		tradingAddress, 
+		aggregatorAddress,
+		vaultAddress,
+		nftAddress1,
+		nftAddress2,
+		nftAddress3,
+		nftAddress4,
+		nftAddress5,
+		linkAddress,
+	] = await Promise.all(
+		[
+			storageContractMethods.callbacks().call(),
+			storageContractMethods.trading().call(),
+			storageContractMethods.priceAggregator().call(),
+			storageContractMethods.vault().call(),
+			storageContractMethods.nfts(0).call(),
+			storageContractMethods.nfts(1).call(),
+			storageContractMethods.nfts(2).call(),
+			storageContractMethods.nfts(3).call(),
+			storageContractMethods.nfts(4).call(),
+			storageContractMethods.linkErc677().call(),
+		]
+	);
 
 	callbacksContract = new web3[n].eth.Contract(CALLBACKS_ABI, callbacksAddress);
 	tradingContract = new web3[n].eth.Contract(TRADING_ABI, tradingAddress);
