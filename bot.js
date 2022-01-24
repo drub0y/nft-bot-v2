@@ -219,7 +219,6 @@ for(var i = 0; i < WSS_URLS.length; i++){
 }
 
 function checkWssAlive(){
-	let promises = [];
 	for(let i = 0; i < WSS_URLS.length; i++){
 		(function(index) {
 			web3[index].eth.getBlockNumber().then((b) => {
