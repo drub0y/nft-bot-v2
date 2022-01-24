@@ -41,7 +41,8 @@ const VAULT_ABI = [{"inputs":[{"internalType":"contractStorageInterfaceV5","name
 const MIN_GAS_PRICE_GWEI = parseFloat(process.env.MIN_GAS_PRICE_GWEI),
 		MAX_GAS_PRICE_GWEI = parseFloat(process.env.MAX_GAS_PRICE_GWEI),
 		LIVE_EVENT_CONFIRMATIONS_SEC = parseInt(process.env.LIVE_EVENT_CONFIRMATIONS_SEC, 10),
-		EVENT_CONFIRMATIONS_SEC = parseInt(process.env.EVENT_CONFIRMATIONS_SEC, 10);
+		EVENT_CONFIRMATIONS_SEC = parseInt(process.env.EVENT_CONFIRMATIONS_SEC, 10),
+		TRIGGER_TIMEOUT = parseInt(process.env.TRIGGER_TIMEOUT, 10);
 
 let allowedLink = false, selectedProvider = null, eventSubTrading = null, eventSubCallbacks = null, nonce = null,
 	providers = [], web3 = [], blocks = [], gasPriceGwei = MIN_GAS_PRICE_GWEI,
@@ -737,14 +738,14 @@ function wss(){
 									setTimeout(() => {
 										ordersTriggered = ordersTriggered.filter(item => JSON.stringify(item) !== JSON.stringify({trade:orderInfo.trade, orderType: orderInfo.type}));
 										nftsBeingUsed = nftsBeingUsed.filter(item => item !== orderInfo.nftId);
-									}, process.env.TRIGGER_TIMEOUT*1000);
+									}, TRIGGER_TIMEOUT*1000);
 							    }).on('error', (e) => {
 							    	console.log("Failed to trigger (order type: " + orderInfo.name + ", nft id: "+orderInfo.nftId+")");
 									//console.log("Tx error (" + e + ")");
 							    	setTimeout(() => {
 										ordersTriggered = ordersTriggered.filter(item => JSON.stringify(item) !== JSON.stringify({trade:orderInfo.trade, orderType: orderInfo.type}));
 										nftsBeingUsed = nftsBeingUsed.filter(item => item !== orderInfo.nftId);
-									}, process.env.TRIGGER_TIMEOUT*1000);
+									}, TRIGGER_TIMEOUT*1000);
 							    });
 							}).catch(e => {
 								console.log("Failed to trigger (order type: " + orderInfo.name + ", nft id: "+orderInfo.nftId+")");
