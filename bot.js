@@ -42,7 +42,8 @@ const MIN_GAS_PRICE_GWEI = parseFloat(process.env.MIN_GAS_PRICE_GWEI),
 		MAX_GAS_PRICE_GWEI = parseFloat(process.env.MAX_GAS_PRICE_GWEI),
 		LIVE_EVENT_CONFIRMATIONS_SEC = parseInt(process.env.LIVE_EVENT_CONFIRMATIONS_SEC, 10),
 		EVENT_CONFIRMATIONS_SEC = parseInt(process.env.EVENT_CONFIRMATIONS_SEC, 10),
-		TRIGGER_TIMEOUT = parseInt(process.env.TRIGGER_TIMEOUT, 10);
+		TRIGGER_TIMEOUT = parseInt(process.env.TRIGGER_TIMEOUT, 10),
+		CHECK_REFILL_SEC = parseInt(process.env.CHECK_REFILL_SEC, 10);
 
 let allowedLink = false, selectedProvider = null, eventSubTrading = null, eventSubCallbacks = null, nonce = null,
 	providers = [], web3 = [], blocks = [], gasPriceGwei = MIN_GAS_PRICE_GWEI,
@@ -450,7 +451,7 @@ function watchLiveTradingEvents(){
 
 				setTimeout(() => {
 					refreshOpenTrades(event);
-				}, process.env.LIVE_EVENT_CONFIRMATIONS_SEC*1000);
+				}, LIVE_EVENT_CONFIRMATIONS_SEC*1000);
 			});
 		}
 
@@ -753,7 +754,7 @@ function wss(){
 						    	setTimeout(() => {
 									ordersTriggered = ordersTriggered.filter(item => JSON.stringify(item) !== JSON.stringify({trade:orderInfo.trade, orderType: orderInfo.type}));
 									nftsBeingUsed = nftsBeingUsed.filter(item => item !== orderInfo.nftId);
-								}, process.env.TRIGGER_TIMEOUT*1000);
+								}, TRIGGER_TIMEOUT*1000);
 							});
 						}
 					});
@@ -825,7 +826,7 @@ if(process.env.VAULT_REFILL_ENABLED){
 	setInterval(() => {
 		refill();
 		deplete();
-	}, process.env.CHECK_REFILL_SEC*1000);
+	}, CHECK_REFILL_SEC*1000);
 }
 
 // -------------------------------------------------
